@@ -2,6 +2,7 @@ package com.example.shop.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class Categoria {
 
     // todo relacion bidireccional -> no obligatoria
     @OneToMany(mappedBy = "categoria")
-    @JsonIgnore
+    // @JsonIgnore
+    @JsonManagedReference("producto-categoria")
     private List<Producto> listaProductos;
 }

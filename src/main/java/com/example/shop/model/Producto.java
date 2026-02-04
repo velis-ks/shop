@@ -1,5 +1,6 @@
 package com.example.shop.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,8 @@ public class Producto {
     @JoinColumn(name = "id_categoria")
 
     // todo gestion relacion
-    @JsonIgnore
+    // @JsonIgnore
+    @JsonBackReference("producto-categoria")
     private Categoria categoria;
 
     public Producto(String nombre, int precio) {
