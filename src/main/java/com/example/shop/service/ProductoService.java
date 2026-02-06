@@ -1,8 +1,8 @@
 package com.example.shop.service;
 
 import com.example.shop.model.Producto;
-import com.example.shop.model.Usuario;
 import com.example.shop.repository.ProductoRepository;
+import com.example.shop.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,17 +12,16 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class ProductoService {
 
+public class ProductoService {
     @Autowired
-    private ProductoRepository repository;
+    private ProductoRepository productoRepository;
+
 
     public List<Producto> getAll(){
-        return repository.findAll();
+        return productoRepository.findAll();
     }
-
-    public Optional<Producto> getProductoId(long id){
-        return repository.findById(id);
+    public Optional<Producto> getId(long id){
+        return productoRepository.findById(id);
     }
-
 }

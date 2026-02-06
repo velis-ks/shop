@@ -1,6 +1,8 @@
 package com.example.shop.service;
 
+import com.example.shop.model.Producto;
 import com.example.shop.model.Usuario;
+import com.example.shop.repository.ProductoRepository;
 import com.example.shop.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,14 +14,16 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UsuarioService {
-    // Metodos con logica que llaman al repositorio
-    // Autowird significa que el repositorio se autoinstancia solo
+
+    // metodos con logica que llaman al repositorio
     @Autowired
     private UsuarioRepository repository;
+    @Autowired
+    private ProductoRepository productoRepository;
 
 
-    public List<Usuario> getAll() {
-        // select * from usuarios
+    public List<Usuario> getAllUsers(){
+        // SELECT * FROM usuarios
         return repository.findAll();
     }
 
@@ -27,19 +31,50 @@ public class UsuarioService {
         return repository.findById(id);
     }
 
-    public Usuario createUsuario(Usuario usuario) {
-        // puede dar error si correo repetido:
-        // analizo: si el usuario esta en BBDD, retorno null
-        // si no esta en BBDD, insertamos usuario
-        return repository.save(usuario);
-    }
-
     public Usuario getUsuarioMail(String correo){
+
         return repository.findByCorreo(correo);
     }
 
-    public Usuario updateUsuario(Usuario usuario){
-        // Si llego a este punto no tengo dudas de que el usuario existe
+    public Usuario createUsuario(Usuario usuario){
+        // analizo si el usuario esta en base de datos retorno null
+        // si no esta en base de datos lo inserto
         return repository.save(usuario);
     }
+
+    public Usuario updateUsuario(Usuario usuario){
+        // si llego a este punto, no tengo dudas que el usuario esta en la base de datos
+        return repository.save(usuario);
+    }
+
+    public void deleteUser(Long id){
+        repository.deleteById(id);
+        // primero busco por id
+        // borro
+        // retorno el encontrado
+        // returno un null
+    }
+
+    // quiero agregar un producto al carrito del usuario
+    // id usuario id producto
+    // idUsuario -> busco por id -> repositorio usuario
+    // idProducto -> busco por id -> repositorio producto
+    // gestion de error
+    // Usuario.getListaProductos.addProcuto(Producto)
+    // save -> actualizas
+
+    public Usuario  comprarProducto(long idUsuario, long idProducto){
+        Usuario usuarioEncontrado = repository.findById(idUsuario).get();
+        Producto productoEncontrado = productoRepository.findById(idProducto).get();
+        usuarioEncontrado.getListaProductos().add(productoEncontrado);
+        return usuarioEncontrado;
+    }
+
+
+
+    // quiero obtener el total de productos que tiene el usuario
+    // coste total
+    // id -> usuario
+    // usuario -> productos -> map Producto::getPrecio -> total del carrito
+
 }
